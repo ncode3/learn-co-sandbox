@@ -1,0 +1,14 @@
+{
+	"name": "CopyFromADLSGen1ToGen2",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDataLakeStore",
+		"typeProperties": {
+			"dataLakeStoreUri": "https://dlsgen1516.azuredatalakestore.net/webhdfs/v1",
+			"tenant": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+			"subscriptionId": "7a275139-4cda-4702-977e-7c8c244ee8e1",
+			"resourceGroupName": "code_nolan_sandbox"
+		}
+	}
+}

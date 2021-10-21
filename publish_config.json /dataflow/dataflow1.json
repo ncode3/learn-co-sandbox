@@ -1,0 +1,39 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "oahustatepublicparking",
+						"type": "DatasetReference"
+					},
+					"name": "oahu"
+				},
+				{
+					"dataset": {
+						"referenceName": "oahu",
+						"type": "DatasetReference"
+					},
+					"name": "curatedsql"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "curated",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Union1"
+				}
+			],
+			"script": "source(output(\n\t\tLot as string,\n\t\tName as string,\n\t\t{Second Entrance/Cross Street} as string,\n\t\tIsland as string,\n\t\tStalls as string,\n\t\tType as string,\n\t\tPayment as string,\n\t\tRates as string,\n\t\t{Rate Limit} as string,\n\t\tAddress as string,\n\t\tLatititude as string,\n\t\tLongitidue as string,\n\t\tGeoJSON as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> oahu\nsource(output(\n\t\tLot as string,\n\t\tName as string,\n\t\t{Second Entrance/Cross Street} as string,\n\t\tIsland as string,\n\t\tStalls as string,\n\t\tType as string,\n\t\tPayment as string,\n\t\tRates as string,\n\t\t{Rate Limit} as string,\n\t\tAddress as string,\n\t\tLatititude as string,\n\t\tLongitidue as string,\n\t\tGeoJSON as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> curatedsql\ncuratedsql union(byName: true,\n\tpartitionBy('hash', 1))~> Union1\nUnion1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['results'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+		}
+	}
+}
